@@ -20,60 +20,62 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtFilter jwtFilter;
+        @Autowired
+        private JwtFilter jwtFilter;
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration = new CorsConfiguration();
+                CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://localhost:5173");
+                configuration.addAllowedOrigin("http://localhost:5173");
+                configuration.addAllowedHeader("*");
+                configuration.addAllowedMethod("*");
+                configuration.setAllowCredentials(true);
 
-        configuration.addAllowedHeader("*");
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        configuration.addAllowedMethod("*");
+                source.registerCorsConfiguration("/**", configuration);
 
-        configuration.setAllowCredentials(true);
+                return source;
+        }
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-        source.registerCorsConfiguration(
-                "/**",
-                configuration);
+        @Bean
+        public SecurityFilterChain securityFilterChain(
+                        HttpSecurity http) throws Exception {
 
-        return source;
-    }
+                http
+                                .csrf(csrf -> csrf.disable())
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+                                .cors(cors -> {
+                                })
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
+                                .sessionManagement(session -> session.sessionCreationPolicy(
+                                                SessionCreationPolicy.STATELESS))
 
-        http
-                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(auth -> auth
 
-                .sessionManagement(session -> session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
+                                                // Public
+                                                .requestMatchers("/api/auth/**").permitAll()
 
-                .authorizeHttpRequests(auth -> auth
+                                                // JWT Protected
+                                                .requestMatchers("/api/categories/**").authenticated()
+                                                .requestMatchers("/api/menu-items/**").authenticated()
+                                                .requestMatchers("/api/orders/**").authenticated()
 
-                        .requestMatchers("/api/auth/**")
-                        .permitAll()
+                                                .anyRequest().authenticated())
 
-                        .anyRequest()
-                        .authenticated())
+                                .formLogin(form -> form.disable());
 
-                .formLogin(form -> form.disable());
+                http.addFilterBefore(
+                                jwtFilter,
+                                UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(
-                jwtFilter,
-                UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
+                return http.build();
+        }
 }
