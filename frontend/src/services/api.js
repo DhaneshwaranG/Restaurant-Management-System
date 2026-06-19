@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: import.meta.env.VITE_API_URL ||
+        "https://restaurant-management-system-b2jn.onrender.com/api",
 });
 
 API.interceptors.request.use(
@@ -14,7 +15,7 @@ API.interceptors.request.use(
 
         return config;
     },
-    (error) => Promise.reject(error),
+    (error) => Promise.reject(error)
 );
 
 export default API;
