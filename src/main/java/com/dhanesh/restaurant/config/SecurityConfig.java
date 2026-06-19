@@ -24,14 +24,19 @@ public class SecurityConfig {
         private JwtFilter jwtFilter;
 
         @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
+
+        @Bean
         public CorsConfigurationSource corsConfigurationSource() {
 
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                configuration.addAllowedOrigin("http://localhost:5173");
+                configuration.addAllowedOriginPattern("*");
                 configuration.addAllowedHeader("*");
                 configuration.addAllowedMethod("*");
-                configuration.setAllowCredentials(true);
+                configuration.setAllowCredentials(false);
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
@@ -41,13 +46,8 @@ public class SecurityConfig {
         }
 
         @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
-
-        @Bean
-        public SecurityFilterChain securityFilterChain(
-                        HttpSecurity http) throws Exception {
+        public SecurityFilterChain securityFilterChain(HttpSecurity http)
+                        throws Exception {
 
                 http
                                 .csrf(csrf -> csrf.disable())
@@ -60,15 +60,17 @@ public class SecurityConfig {
 
                                 .authorizeHttpRequests(auth -> auth
 
-                                                // Public
+                                                // Public APIs
                                                 .requestMatchers("/api/auth/**").permitAll()
 
-                                                // JWT Protected
+                                                // Login required
                                                 .requestMatchers("/api/categories/**").authenticated()
                                                 .requestMatchers("/api/menu-items/**").authenticated()
                                                 .requestMatchers("/api/orders/**").authenticated()
 
                                                 .anyRequest().authenticated())
+
+                                .httpBasic(httpBasic -> httpBasic.disable())
 
                                 .formLogin(form -> form.disable());
 
