@@ -37,7 +37,7 @@ function Dashboard() {
         </div>
       </nav>
 
-      <main className="dashboard">
+      <main className="dashboard mobile-dashboard">
         <CategorySidebar
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

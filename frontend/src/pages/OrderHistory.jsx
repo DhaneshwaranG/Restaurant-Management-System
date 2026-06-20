@@ -26,44 +26,46 @@ function OrderHistory() {
         </button>
       </div>
 
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Items</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Order Date</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-
-              <td>{order.items}</td>
-
-              <td>₹{order.totalAmount}</td>
-
-              <td>
-                <span className={`status-${order.status.toLowerCase()}`}>
-                  {order.status}
-                </span>
-              </td>
-
-              <td>{new Date(order.orderDate).toLocaleString()}</td>
+      <div className="table-wrapper">
+        <table
+          border="1"
+          cellPadding="10"
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Items</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Order Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+
+                <td>{order.items}</td>
+
+                <td>₹{order.totalAmount}</td>
+
+                <td>
+                  <span className={`status-${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                </td>
+
+                <td>{new Date(order.orderDate).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

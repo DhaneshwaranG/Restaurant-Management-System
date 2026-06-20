@@ -245,7 +245,7 @@ function Admin() {
           marginBottom: "30px",
         }}
       >
-        <ResponsiveContainer>
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart data={revenueData}>
             <CartesianGrid stroke="#f4d7b0" />
 
@@ -336,141 +336,146 @@ function Admin() {
       )}
 
       <h2>Categories</h2>
-
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          marginBottom: "30px",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Category Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {categories.map((category) => (
-            <tr key={category.id}>
-              <td>{category.id}</td>
-
-              <td>{category.name}</td>
-
-              <td>
-                <button
-                  className="icon-btn delete-btn"
-                  onClick={() => deleteCategory(category.id)}
-                >
-                  <FaTrash />
-                </button>
-              </td>
+      <div className="table-wrapper">
+        <table
+          border="1"
+          cellPadding="10"
+          style={{
+            width: "100%",
+            marginBottom: "30px",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category Name</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
-      <h2>Menu Items</h2>
+          <tbody>
+            {categories.map((category) => (
+              <tr key={category.id}>
+                <td>{category.id}</td>
 
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+                <td>{category.name}</td>
 
-        <tbody>
-          {menuItems.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>₹{item.price}</td>
-              <td>{item.category?.name}</td>
-
-              <td>
-                <div className="action-buttons">
-                  <button
-                    className="icon-btn edit-btn"
-                    onClick={() => editMenuItem(item)}
-                  >
-                    <FaEdit />
-                  </button>
-
+                <td>
                   <button
                     className="icon-btn delete-btn"
-                    onClick={() => deleteMenuItem(item.id)}
+                    onClick={() => deleteCategory(category.id)}
                   >
                     <FaTrash />
                   </button>
-                </div>
-              </td>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Menu Items</h2>
+      <div className="table-wrapper">
+        <table
+          border="1"
+          cellPadding="10"
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {menuItems.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>₹{item.price}</td>
+                <td>{item.category?.name}</td>
+
+                <td>
+                  <div className="action-buttons">
+                    <button
+                      className="icon-btn edit-btn"
+                      onClick={() => editMenuItem(item)}
+                    >
+                      <FaEdit />
+                    </button>
+
+                    <button
+                      className="icon-btn delete-btn"
+                      onClick={() => deleteMenuItem(item.id)}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <h2>Orders</h2>
-
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Items</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Order Date</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-
-              <td>{order.items}</td>
-
-              <td>₹{order.totalAmount}</td>
-
-              <td>
-                <select
-                  value={order.status}
-                  onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Preparing">Preparing</option>
-                  <option value="Ready">Ready</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </td>
-
-              <td>{new Date(order.orderDate).toLocaleString()}</td>
+      <div className="table-wrapper">
+        <table
+          border="1"
+          cellPadding="10"
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Items</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Order Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+
+                <td>{order.items}</td>
+
+                <td>₹{order.totalAmount}</td>
+
+                <td>
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      updateOrderStatus(order.id, e.target.value)
+                    }
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Ready">Ready</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </td>
+
+                <td>{new Date(order.orderDate).toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
